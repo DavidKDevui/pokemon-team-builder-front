@@ -136,8 +136,8 @@ export default function LoginPage() {
                         placeholder="Mot de passe"
                     />
                     </div>
-                    <p className={`text-white/50 font-press-start-2p text-xs transition-all duration-300 ease-in-out transform ${password.length > 0 && isSubmitDisabled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
-                        {password.length > 0 && isSubmitDisabled && "Le mot de passe doit contenir au moins 8 caractères, des chiffres et une lettre majuscule"}
+                    <p className={`text-white/50 font-press-start-2p text-xs transition-all duration-300 ease-in-out transform ${password.length > 0 && isSubmitDisabled && !isSubmitting ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+                        {password.length > 0 && isSubmitDisabled && !isSubmitting && "Le mot de passe doit contenir au moins 8 caractères, des chiffres et une lettre majuscule"}
                     </p>
                 </div>
 

@@ -6,7 +6,7 @@ import { Pokemon } from '@/types/PokemonType';
 import Image from 'next/image';
 import Loader from '@/components/Loader';
 import { useAuth } from '@/context/AuthContext';
-import { AuthService } from '@/services/AuthService';
+import { TrainerService } from '@/services/TrainerService';
 import { useRouter } from 'next/navigation';
 import { ToastService } from '@/services/ToastService';
 
@@ -18,8 +18,8 @@ export default function PokemonDetail() {
   const { pokemons, loading, error } = usePokemon();
   const { isAuthenticated, trainer, setTrainer } = useAuth();
 
-  const authService = AuthService.getInstance();
-  const toastService = ToastService.getInstance();
+   const toastService = ToastService.getInstance();
+  const trainerService = TrainerService.getInstance();
   const pokemon: Pokemon | undefined = pokemons && pokemons?.find((pokemon) => pokemon.pokedexId === parseInt(id as string));
 
   const isPokemonInTeam: boolean =  trainer?.team.includes(pokemon?.pokedexId.toString() || "") || false;
@@ -39,7 +39,7 @@ export default function PokemonDetail() {
       return;
     }
 
-    const response = await authService.addPokemonToTeam(pokemon!.pokedexId);
+    const response = await trainerService.addPokemonToTeam(pokemon!.pokedexId);
     if (response instanceof Error) {
       const statusCode = parseInt(response.message);
       if (statusCode === 400 || statusCode === 500 || statusCode === 404) {
@@ -66,7 +66,7 @@ export default function PokemonDetail() {
       return;
     }
 
-    const response = await authService.removePokemonFromTeam(pokemon!.pokedexId);
+    const response = await trainerService.removePokemonFromTeam(pokemon!.pokedexId);
     if (response instanceof Error) {
       const statusCode = parseInt(response.message);
       if (statusCode === 400 || statusCode === 500 || statusCode === 404) {
@@ -285,7 +285,7 @@ export default function PokemonDetail() {
                     
                     <button 
                         disabled={isTeamFull}
-                        className={`bg-[#f1c40f] text-black font-press-start-2p text-sm px-4 py-2 rounded-md  transition-colors duration-300 mt-4 active:scale-97 ${isTeamFull ? 'opacity-50 cursor-not-allowed ' : ' hover:bg-[#f1c40f]/80 cursor-pointer '}`}
+                        className={`bg-[#f1c40f] text-black font-press-start-2p text-sm px-4 py-2 rounded-md  transition-colors duration-300 mt-4 ${isTeamFull ? 'opacity-50 cursor-not-allowed ' : ' hover:bg-[#f1c40f]/80 cursor-pointer  active:scale-97 '}`}
                         onClick={handleAddPokemonToTeam}
                         >
                         Ajouter à mon équipe

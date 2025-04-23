@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { PokemonProvider } from "@/context/PokedexContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
@@ -24,8 +25,8 @@ const pressStart2P = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "Pokemon Team Builder",
-  description: "Créez et gérez votre équipe Pokémon",
+  title: "Pokemon Team Builder | Construisez votre équipe Pokémon parfaite",
+  description: "Construisez votre équipe Pokémon parfaite",
 };
 
 export default function RootLayout({
@@ -37,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head> 
-        <link rel="icon" href="/images/home/pokeball.png" sizes="32x32" />
+        <link rel="icon" href="/pikachu.ico" sizes="32x32" />
  
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.className} antialiased`}>
@@ -49,6 +50,7 @@ export default function RootLayout({
                 <Navbar />
                 <Toast />
                 {children}
+                <Footer />
               </main>
             </PokemonProvider>
           </ToastProvider>

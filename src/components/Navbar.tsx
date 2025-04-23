@@ -57,7 +57,7 @@ export default function Navbar() {
         <div className="hidden md:flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <Link href="/" className="text-[#f1c40f]  font-bold  font-press-start-2p ">
-            <Image src="/images/home/pikachu.gif" alt="Pokeball" width={32} height={32} />
+            <Image src="/images/home/pikachu.gif" unoptimized alt="Pokeball" width={32} height={32} />
             </Link>
           </div>
           
@@ -98,7 +98,7 @@ export default function Navbar() {
         <div className="md:hidden">
           <div className="flex justify-between items-center">
             <Link href="/" className="text-[#f1c40f] text-shadow-[2px_2px_0_#e74c3c] font-bold text-xl font-press-start-2p ">
-            <Image src="/images/home/pikachu.gif" alt="Pokeball" width={32} height={32} />
+            <Image src="/images/home/pikachu.gif" unoptimized alt="Pokeball" width={32} height={32} />
             </Link>
             
             <button

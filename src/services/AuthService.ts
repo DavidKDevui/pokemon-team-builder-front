@@ -3,6 +3,7 @@ import { StorageService } from "./StorageService";
 import { ToastService } from "./ToastService";
 import { ApiService } from "./ApiService";
 
+
 export class AuthService {
   private static instance: AuthService;
   private storageService: StorageService;
@@ -25,7 +26,7 @@ export class AuthService {
   public async register(email: string, password: string, firstName: string, lastName: string): Promise<{ accessToken: string, refreshToken: string, trainer: Trainer } | Error> {
     try {
       const data = await this.apiService.post<{ accessToken: string, refreshToken: string, trainer: Trainer }>(
-        `/auth/register`,
+        `/v1/auth/register`,
         { email, password, firstName, lastName }
       );
 
@@ -40,7 +41,7 @@ export class AuthService {
   public async login(email: string, password: string): Promise<{ accessToken: string, refreshToken: string, trainer: Trainer } | Error> {
     try {
       const data = await this.apiService.post<{ accessToken: string, refreshToken: string, trainer: Trainer }>(
-        `/auth/login`,
+        `/v1/auth/login`,
         { email, password }
       );
 
@@ -59,7 +60,7 @@ export class AuthService {
 
   public async logout(): Promise<true | Error> {
     try {
-      const response = await this.apiService.post<true | Error>(`/auth/logout`, {});
+      const response = await this.apiService.post<true | Error>(`/v1/auth/logout`, {});
       return response;
     } catch (error) {
       console.error(error);
@@ -68,24 +69,6 @@ export class AuthService {
   }
 
 
-  public async addPokemonToTeam(pokemonId: number): Promise<{ team : string[] } | Error> {
-    try {
-      const response = await this.apiService.post<{ team : string[] } | Error>(`/trainers/team/pokemon`, { pokemonId });
-      return response;
-    } catch (error) {
-      console.error(error);
-      return new Error("Erreur interne du serveur");
-    }
-  }
 
-  public async removePokemonFromTeam(pokemonId: number): Promise<{ team : string[] } | Error> {
-    try {
-      const response = await this.apiService.delete<{ team : string[] } | Error>(`/trainers/team/pokemon/${pokemonId}`);
-      return response;
-    } catch (error) {
-      console.error(error);
-      return new Error("Erreur interne du serveur");
-    }
-  }
 
 } 

@@ -30,7 +30,7 @@ export default function Community() {
     {
       platform: 'Discord',
       icon: '💬',
-      url: 'https://discord.gg/your-discord-link'
+      url: 'https://discord.gg/'
     },
     {
       platform: 'Twitter',
@@ -40,7 +40,7 @@ export default function Community() {
     {
       platform: 'Reddit',
       icon: '📱',
-      url: 'https://reddit.com/r/your-subreddit'
+      url: 'https://reddit.com/'
     }
   ];
 

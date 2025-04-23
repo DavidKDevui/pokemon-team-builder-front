@@ -1,4 +1,5 @@
- 
+import Cookies from 'js-cookie';
+
 export class StorageService {
   private static instance: StorageService;
   
@@ -13,23 +14,30 @@ export class StorageService {
    
   
   public isItemInLocalStorage(key: string): boolean {
-    return localStorage.getItem(key) !== null;
+    return Cookies.get(key) !== undefined;
   }
 
   getItem(key: string): string | null {
-    return localStorage.getItem(key);
+    return Cookies.get(key) || null;
   }
 
   setItem(key: string, value: string): void {
-    localStorage.setItem(key, value);
+    Cookies.set(key, value, {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/'
+    });
   }
 
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    Cookies.remove(key, { path: '/' });
   }
 
   clear(): void {
-    localStorage.clear();
+    const allCookies = Cookies.get();
+    Object.keys(allCookies).forEach(cookie => {
+      Cookies.remove(cookie, { path: '/' });
+    });
   }
  
 } 

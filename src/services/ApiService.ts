@@ -1,16 +1,20 @@
 import { StorageService } from './StorageService';
+import { ToastService } from './ToastService';
+
 
 export class ApiService {
   private static instance: ApiService;
   private storageService: StorageService;
+  private toastService: ToastService;
   private isRefreshing: boolean = false;
   private refreshPromise: Promise<void> | null = null;
+  private BACKEND_URL: string = `/api`;
 
-  private BACKEND_URL: string = process.env.NEXT_PUBLIC_BACKEND_URL || '';
-    //private BACKEND_URL: string = '/api/proxy';
 
   private constructor() {
     this.storageService = StorageService.getInstance();
+    this.toastService = ToastService.getInstance();
+    
   }
 
   public static getInstance(): ApiService {
@@ -21,15 +25,9 @@ export class ApiService {
   }
 
   private async getHeaders(): Promise<HeadersInit> {
-    const token = this.storageService.getItem('accessToken');
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
     return headers;
   }
 
@@ -43,10 +41,13 @@ export class ApiService {
       try {
         const refreshToken = this.storageService.getItem('refreshToken');
         if (!refreshToken) {
-          throw new Error('No refresh token available');
+          this.storageService.removeItem('accessToken' );
+          this.storageService.removeItem('refreshToken' );
+          this.toastService.error("Votre session a expiré, veuillez vous reconnecter");
+          throw new Error('Expired session');
         }
 
-        const response = await fetch(`${this.BACKEND_URL}/auth/refresh-token`, {
+        const response = await fetch(`${this.BACKEND_URL}/v1/auth/refresh-token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -55,7 +56,10 @@ export class ApiService {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to refresh token');
+          this.storageService.removeItem('accessToken' );
+          this.storageService.removeItem('refreshToken' );
+          this.toastService.error("Votre session a expiré, veuillez vous reconnecter");
+          throw new Error('Expired session');
         }
  
         const data = await response.json();
@@ -73,7 +77,7 @@ export class ApiService {
   private async handleRequest<T>(url: string, options: RequestInit, retryCount: number = 0): Promise<T> {
     try {
       const headers = await this.getHeaders();
-      const response = await fetch(url, {
+      const response = await fetch(`${this.BACKEND_URL}${url}`, {
         ...options,
         headers: {
           ...headers,
@@ -108,25 +112,25 @@ export class ApiService {
   }
 
   public async get<T>(url: string): Promise<T> {
-    return this.handleRequest<T>(`${this.BACKEND_URL}${url}`, { method: 'GET' });
+    return this.handleRequest<T>(url, { method: 'GET' });
   }
 
   public async post<T>(url: string, data: unknown): Promise<T> {
-    return this.handleRequest<T>(`${this.BACKEND_URL}${url}`, {
+    return this.handleRequest<T>(url, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
   public async put<T>(url: string, data: unknown): Promise<T> {
-    return this.handleRequest<T>(`${this.BACKEND_URL}${url}`, {
+    return this.handleRequest<T>(url, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
   public async delete<T>(url: string): Promise<T> {
-    return this.handleRequest<T>(`${this.BACKEND_URL}${url}`, { method: 'DELETE' });
+    return this.handleRequest<T>(url, { method: 'DELETE' });
   }
 }
  

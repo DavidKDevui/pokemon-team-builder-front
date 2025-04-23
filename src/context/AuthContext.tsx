@@ -38,14 +38,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      const initializeAuth = async () => {
        const isAccessToken = await storageService.isItemInLocalStorage("accessToken");
        if (isAccessToken) {
-         const trainer = await trainerService.getTrainer();
-         if (trainer instanceof Error) {
+         const response = await trainerService.getTrainer();
+         if (response instanceof Error) {
           storageService.removeItem("accessToken");
           storageService.removeItem("refreshToken");
           setTrainer(undefined);
           setIsAuthenticated(false);
          } else {
-          setTrainer(trainer);
+          setTrainer(response.trainer);
           setIsAuthenticated(true);
          }
        } else {

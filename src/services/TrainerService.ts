@@ -19,13 +19,13 @@ export class TrainerService {
   }
 
 
-  public async getTrainer(): Promise<Trainer | Error> {
+  public async getTrainer(): Promise<{ trainer: Trainer } | Error> {
     try {
-      const response: Trainer | Error = await this.apiService.get<Trainer | Error>(`/v1/trainers/me`);
+      const response: { trainer: Trainer } | Error = await this.apiService.get<{ trainer: Trainer } | Error>(`/v1/trainers/me`);
       return response;
     } catch (error) {
       console.error(error);
-      return new Error("Erreur interne du serveur");
+      return new Error("Internal Server Error");
     }
   }
 
@@ -36,7 +36,7 @@ export class TrainerService {
       return response;
     } catch (error) {
       console.error(error);
-      return new Error("Erreur interne du serveur");
+      return new Error("Internal Server Error");
     }
   }
 
@@ -46,7 +46,7 @@ export class TrainerService {
       return response;
     } catch (error) {
       console.error(error);
-      return new Error("Erreur interne du serveur");
+      return new Error("Internal Server Error");
     }
   }
 } 

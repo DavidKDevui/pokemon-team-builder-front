@@ -12,11 +12,6 @@ export async function GET(request: Request) {
         const { pathname, search } = new URL(request.url);
         const endpoint: string = `${pathname}${search}`;
 
-        console.log("ENDPOINT", endpoint);
-        console.log(`LAAA ${BACKEND_ENDPOINT}${endpoint}`);
-        console.log(`LAAA2 ${BACKEND_ENDPOINT}`);
-        console.log(`LAAA3 ${endpoint}`);
-
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         
         // Utilisation de l'API cookies() de Next.js
@@ -32,16 +27,7 @@ export async function GET(request: Request) {
             headers: headers,
         });
 
-        if (!response.ok) {
-            const errorData: { message: string, statusCode: number } = await response.json();
-            return NextResponse.json(
-                { message: errorData.message || 'Erreur lors de la requête API' },
-                { status: errorData.statusCode }
-            );
-        }
-
         const data = await response.json();
-        console.log("RESPONSE", data);
         return NextResponse.json(data);
 
     } catch (error) {
@@ -76,14 +62,6 @@ export async function POST(request: Request) {
             body: JSON.stringify(body)
         });
 
-        if (!response.ok) {
-            const errorData: { message: string, statusCode: number } = await response.json();
-            return NextResponse.json(
-                { message: errorData.message || 'Erreur lors de la requête API' },
-                { status: errorData.statusCode }
-            );
-        }
-
         const data = await response.json();
         return NextResponse.json(data);
     } catch (error) {
@@ -117,14 +95,6 @@ export async function DELETE(request: Request) {
             method: 'DELETE',
             headers: headers
         });
-
-        if (!response.ok) {
-            const errorData: { message: string, statusCode: number } = await response.json();
-            return NextResponse.json(
-                { message: errorData.message || 'Erreur lors de la requête API' },
-                { status: errorData.statusCode }
-            );
-        }
 
         const data = await response.json();
         return NextResponse.json(data);

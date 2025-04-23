@@ -85,23 +85,18 @@ export class ApiService {
         },
       });
 
-      const responseText = await response.text();
-      let data;
-      try {
-        data = responseText ? JSON.parse(responseText) : null;
-      } catch (e: unknown) {
-        console.log(e)
-        data = null;
-      }
 
       if (!response.ok) {
-        if (data?.message === "Token Expired" && retryCount === 0) {
-            await this.refreshToken();
-            return this.handleRequest(url, options, retryCount + 1);
-          }
-        return new Error(response.status.toString()) as T;
+        return new Error("Internal Server Error") as T;
       }
 
+      const data = await response.json();
+      console.log("DATA", data);
+
+      if (data?.message === "Token Expired" && retryCount === 0) {
+        await this.refreshToken();
+        return this.handleRequest(url, options, retryCount + 1);
+      }
       
  
       return data as T;

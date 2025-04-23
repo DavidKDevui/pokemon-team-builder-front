@@ -91,7 +91,6 @@ export class ApiService {
       }
 
       const data = await response.json();
-      console.log("DATA", data);
 
       if (data?.message === "Token Expired" && retryCount === 0) {
         await this.refreshToken();

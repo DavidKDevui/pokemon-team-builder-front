@@ -39,5 +39,4 @@ export class StorageService {
       Cookies.remove(cookie, { path: '/' });
     });
   }
- 
 } 
